@@ -1,44 +1,42 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using VzalxndrSpace.Api.DTOs;
+using VzalxndrSpace.Api.Services;
 using VzalxndrSpace.Domain.Entities;
 using VzalxndrSpace.Infrastructure.Data;
 
 namespace VzalxndrSpace.Api.Controllers;
 
-//TODO: move logic to GoalService!!!
 [ApiController]
 [Route("api/[controller]")]
 public class GoalsController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IGoalService _goalService;
 
-    public GoalsController(AppDbContext context)
+    public GoalsController(IGoalService goalService)
     {
-        _context = context;
+        _goalService = goalService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateGoal([FromBody] string title)
+    public async Task<IActionResult> CreateGoal([FromBody] CreateGoalRequest request)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            return BadRequest("Title cannot be empty");
-
-        var goal = new Goal { Title = title };
-        _context.Goals.Add(goal);
-        await _context.SaveChangesAsync();
-
-        return Ok(goal);
+        try
+        {
+            var result = await _goalService.CreateGoalAsync(request);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet]
     public async Task<IActionResult> GetGoals()
     {
-        // .INCLUDE ONLY FOR DEVELOPMENT
-        var goals = await _context.Goals
-            .Include(g => g.Sessions)
-            .ToListAsync();
-        
-        return Ok(goals);
+        var result = await _goalService.GetGoalsAsync();
+        return Ok(result);
     }
 }

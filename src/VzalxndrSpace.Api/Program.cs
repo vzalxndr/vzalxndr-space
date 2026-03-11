@@ -9,6 +9,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IGoalService, GoalService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

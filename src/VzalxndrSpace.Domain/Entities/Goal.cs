@@ -9,7 +9,7 @@ public class Goal
     public string? Description { get; set; } = string.Empty;
     
     // enforces UTC time at the domain level per architecture rules
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     
     public bool IsActive { get; set; } = true;
     
