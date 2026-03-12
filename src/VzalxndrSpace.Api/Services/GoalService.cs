@@ -43,6 +43,27 @@ public class GoalService : IGoalService
         return goals.Select(MapToResponse);
     }
 
+    public async Task<GoalResponse> CompleteGoalAsync(Guid id)
+    {
+        var goal = await _context.Goals
+            .Include(g => g.Sessions)
+            .FirstOrDefaultAsync(g => g.Id == id);
+        if (goal == null)
+        {
+            throw new ArgumentException("Goal not found.");
+        }
+        if (goal.Status == Domain.Enums.GoalStatus.Completed)
+        {
+            throw new InvalidOperationException("Goal is already completed.");
+        }
+        
+        goal.Status = Domain.Enums.GoalStatus.Completed;
+        goal.CompletedAtUtc = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        
+        return MapToResponse(goal);
+    }
+
     private static GoalResponse MapToResponse(Goal goal)
     {
         var totalMinutes = goal.Sessions
@@ -54,7 +75,8 @@ public class GoalService : IGoalService
             goal.Title,
             goal.Description,
             goal.CreatedAtUtc,
-            goal.IsActive,
+            goal.Status,
+            goal.CompletedAtUtc,
             goal.Sessions.Count,
             (int)totalMinutes);
     }

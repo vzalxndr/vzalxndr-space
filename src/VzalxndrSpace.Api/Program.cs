@@ -11,6 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IGoalService, GoalService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
