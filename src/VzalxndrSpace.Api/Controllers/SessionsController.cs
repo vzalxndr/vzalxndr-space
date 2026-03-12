@@ -49,7 +49,7 @@ public class SessionsController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            // session is already stopped
+            // session is already stopped or was less than 3 minutes
             return Conflict(new { message = ex.Message });
         }
     }

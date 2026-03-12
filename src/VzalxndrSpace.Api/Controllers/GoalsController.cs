@@ -39,4 +39,24 @@ public class GoalsController : ControllerBase
         var result = await _goalService.GetGoalsAsync();
         return Ok(result);
     }
+    
+    [HttpPatch("{id:guid}/complete")]
+    public async Task<IActionResult> CompleteGoal(Guid id)
+    {
+        try
+        {
+            var result = await _goalService.CompleteGoalAsync(id);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            // invalid request data (e.g.: Goal doesn't exist)
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            // invalid operation, Goal is already completed
+            return Conflict(new { message = ex.Message });
+        }
+    }
 }

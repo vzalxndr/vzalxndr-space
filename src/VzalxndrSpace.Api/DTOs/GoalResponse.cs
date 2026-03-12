@@ -1,4 +1,5 @@
 using System;
+using VzalxndrSpace.Domain.Enums;
 
 namespace VzalxndrSpace.Api.DTOs;
 
@@ -7,7 +8,8 @@ public record GoalResponse(
     string Title,
     string? Description,
     DateTime CreatedAtUtc,
-    bool IsActive,
+    GoalStatus Status,
+    DateTime? CompletedAtUtc,
     int SessionsCount,
     int TotalTimeSpentMinutes
 );

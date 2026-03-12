@@ -58,8 +58,15 @@ public class SessionService : ISessionService
         }
         
         session.EndTimeUtc = DateTime.UtcNow;
-        
         var actualDuration = session.EndTimeUtc.Value - session.StartTimeUtc;
+
+        if (actualDuration.TotalMinutes < 3)
+        {
+            _context.Sessions.Remove(session);
+            await _context.SaveChangesAsync();
+            throw new InvalidOperationException("Session was less than 3 minutes and was discarded.");
+        }
+
         session.Status = actualDuration.TotalMinutes >= session.TargetDurationMinutes ? SessionStatus.Completed : SessionStatus.Interrupted;
         
         await _context.SaveChangesAsync();
