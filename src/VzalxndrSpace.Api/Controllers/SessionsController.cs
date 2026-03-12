@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VzalxndrSpace.Api.DTOs;
 using VzalxndrSpace.Api.Services;
@@ -5,6 +6,7 @@ using VzalxndrSpace.Api.Services;
 namespace VzalxndrSpace.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SessionsController : ControllerBase
 {
     private readonly ISessionService _sessionService;

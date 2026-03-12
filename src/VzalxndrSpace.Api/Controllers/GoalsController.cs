@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VzalxndrSpace.Api.DTOs;
@@ -20,6 +21,7 @@ public class GoalsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateGoal([FromBody] CreateGoalRequest request)
     {
         try
@@ -41,6 +43,7 @@ public class GoalsController : ControllerBase
     }
     
     [HttpPatch("{id:guid}/complete")]
+    [Authorize]
     public async Task<IActionResult> CompleteGoal(Guid id)
     {
         try
