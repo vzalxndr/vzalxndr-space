@@ -3,6 +3,8 @@ using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VzalxndrSpace.WpfClient;
+using VzalxndrSpace.WpfClient.Services;
+using VzalxndrSpace.WpfClient.ViewModels;
 
 namespace VzalxndrSpace.WpfClient;
 
@@ -20,8 +22,16 @@ public partial class App : Application
             {
                 services.AddHttpClient<AuthService>(client =>
                 {
-                    client.BaseAddress = new Uri("http://localhost:5000/");
+                    client.BaseAddress = new Uri("http://localhost:5089/");
                 });
+                services.AddHttpClient<GoalApiService>(client =>
+                {
+                    client.BaseAddress = new Uri("http://localhost:5089/");
+                });
+                services.AddTransient<LoginViewModel>();
+                services.AddTransient<Views.LoginWindow>();
+                services.AddTransient<MainViewModel>();
+                services.AddTransient<Views.MainWindow>();
             })
             .Build();
     }
@@ -30,6 +40,11 @@ public partial class App : Application
     { 
         await AppHost!.StartAsync();
         base.OnStartup(e);
+        var loginWindow = AppHost.Services.GetRequiredService<Views.LoginWindow>();
+
+        loginWindow.DataContext = AppHost.Services.GetRequiredService<LoginViewModel>();
+
+        loginWindow.Show();
     }
 
     protected override async void OnExit(ExitEventArgs e)
