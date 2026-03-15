@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="VzalxndrSpace - Вход"
+        Title="vzalxndr-space: login"
         Height="300"
         Width="400"
         WindowStartupLocation="CenterScreen"
@@ -27,6 +27,7 @@
                          FontSize="16" />
             <Button Content="Login"
                     Command="{Binding LoginCommand}"
+                    IsDefault="True"
                     Height="35"
                     FontSize="16"
                     Background="#007ACC"

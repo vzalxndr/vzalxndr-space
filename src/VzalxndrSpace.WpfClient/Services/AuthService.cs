@@ -43,5 +43,12 @@ namespace VzalxndrSpace.WpfClient
 
             return false;
         }
+
+        public void Logout()
+        {
+            CurrentToken = null;
+
+            _client.DefaultRequestHeaders.Authorization = null;
+        }
     }
 }

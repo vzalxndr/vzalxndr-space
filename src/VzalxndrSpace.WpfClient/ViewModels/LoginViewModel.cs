@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using VzalxndrSpace.WpfClient.ViewModels;
 
-namespace VzalxndrSpace.WpfClient
+namespace VzalxndrSpace.WpfClient.ViewModels
 {
     public partial class LoginViewModel : ObservableObject 
     {
