@@ -4,26 +4,47 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VzalxndrSpace.WpfClient.Views"
+        xmlns:converters="clr-namespace:VzalxndrSpace.WpfClient.Converters"
         mc:Ignorable="d"
         Title="vzalxndr-space: admin"
         Height="450"
         Width="800"
         WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <converters:StatusToTextConverter x:Key="StatusTextConverter" />
+        <converters:StatusToColorConverter x:Key="StatusColorConverter" />
+    </Window.Resources>
+    
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Goals:"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="0,0,0,15"
-                   Grid.Row="0" />
+        <Grid Grid.Row="0"
+              Margin="0,0,0,15">
+            <TextBlock Text="My goals:"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
+
+            <Button Content="Logout"
+                    Command="{Binding LogoutCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Padding="15,7"
+                    Background="#FF4C4C"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontWeight="SemiBold" />
+        </Grid>
 
         <ListBox ItemsSource="{Binding Goals}"
                  Grid.Row="1"
-                 BorderThickness="0">
+                 BorderThickness="0"
+                 HorizontalAlignment="Left">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border Background="#F0F0F0"
@@ -38,10 +59,10 @@
                             <TextBlock Text="{Binding Description}"
                                        TextWrapping="Wrap"
                                        Margin="0,5,0,0" />
-                            <TextBlock Text="{Binding Status}"
-                                       Foreground="Gray"
+                            <TextBlock Text="{Binding Status, Converter={StaticResource StatusTextConverter}}"
+                                       Foreground="{Binding Status, Converter={StaticResource StatusColorConverter}}"
                                        Margin="0,5,0,0"
-                                       FontStyle="Italic" />
+                                       FontWeight="SemiBold" />
                         </StackPanel>
                     </Border>
                 </DataTemplate>
