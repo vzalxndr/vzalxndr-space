@@ -56,5 +56,64 @@ namespace VzalxndrSpace.WpfClient.ViewModels
 
             mainWindow?.Close();
         }
+
+        [RelayCommand]
+        private async Task OpenAddGoalWindowAsync()
+        {
+            var addGoalWindow = App.AppHost!.Services.GetRequiredService<VzalxndrSpace.WpfClient.Views.AddGoalWindow>();
+            addGoalWindow.DataContext = App.AppHost!.Services.GetRequiredService<VzalxndrSpace.WpfClient.ViewModels.AddGoalViewModel>();
+
+            addGoalWindow.Owner = System.Windows.Application.Current.Windows
+                .OfType<VzalxndrSpace.WpfClient.Views.MainWindow>()
+                .FirstOrDefault();
+
+            bool? result = addGoalWindow.ShowDialog();
+
+            if (result == true)
+            {
+                await LoadGoalsAsync();
+            }
+        }
+
+        //[RelayCommand]
+        //private async Task DeleteGoalAsync(GoalDto? goal)
+        //{
+        //    if (goal == null)
+        //    {
+        //        return;
+        //    }
+
+        //    bool success = await _goalApiClient.DeleteGoalAsync(goal.Id);
+
+        //    if (success)
+        //    {
+        //        Goals.Remove(goal);
+        //    }
+        //    else
+        //    { 
+        //        //TODO: MessageBox with an error 
+        //    }
+        //}
+
+        [RelayCommand]
+        private async Task CompleteGoalAsync(GoalDto? goal)
+        {
+            if (goal == null || goal.Status == 1)
+            {
+                return;
+            }
+
+            bool success = await _goalApiClient.CompleteGoalAsync(goal.Id);
+
+            if (success)
+            { 
+                int index = Goals.IndexOf(goal);
+                if (index != -1)
+                {
+                    var updatedGoal = goal with { Status = 1 };
+                    Goals[index] = updatedGoal;
+                }
+            }
+        }
     }
 }

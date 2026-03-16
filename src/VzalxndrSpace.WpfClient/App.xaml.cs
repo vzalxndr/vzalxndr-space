@@ -24,14 +24,20 @@ public partial class App : Application
                 {
                     client.BaseAddress = new Uri("http://localhost:5089/");
                 });
+
                 services.AddHttpClient<GoalApiService>(client =>
                 {
                     client.BaseAddress = new Uri("http://localhost:5089/");
                 });
+
                 services.AddTransient<LoginViewModel>();
                 services.AddTransient<Views.LoginWindow>();
+
                 services.AddTransient<MainViewModel>();
                 services.AddTransient<Views.MainWindow>();
+
+                services.AddTransient<AddGoalViewModel>();
+                services.AddTransient<Views.AddGoalWindow>();
             })
             .Build();
     }
