@@ -38,6 +38,9 @@ public partial class App : Application
 
                 services.AddTransient<AddGoalViewModel>();
                 services.AddTransient<Views.AddGoalWindow>();
+
+                services.AddTransient<SessionViewModel>();
+                services.AddTransient<Views.SessionWindow>();
             })
             .Build();
     }

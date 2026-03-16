@@ -115,5 +115,26 @@ namespace VzalxndrSpace.WpfClient.ViewModels
                 }
             }
         }
+
+        [RelayCommand]
+        private void StartSession(GoalDto? goal)
+        {
+            if (goal == null || goal.Status != 0)
+            {
+                return;
+            }
+
+            var sessionWindow = App.AppHost!.Services.GetRequiredService<VzalxndrSpace.WpfClient.Views.SessionWindow>();
+            var sessionVm = App.AppHost!.Services.GetRequiredService<SessionViewModel>();
+
+            sessionVm.Initialize(goal);
+            sessionWindow.DataContext = sessionVm;
+
+            sessionWindow.Owner = System.Windows.Application.Current.Windows
+                .OfType<VzalxndrSpace.WpfClient.Views.MainWindow>()
+                .FirstOrDefault();
+
+            sessionWindow.ShowDialog();
+        }
     }
 }

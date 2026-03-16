@@ -65,5 +65,32 @@ namespace VzalxndrSpace.WpfClient.Services
 
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<Guid?> StartSessionAsync(Guid goalId, int targetDurationMinutes)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthService.CurrentToken);
+
+            var content = new { GoalId = goalId, TargetDurationMinutes = targetDurationMinutes };
+            var response = await _httpClient.PostAsJsonAsync("api/Sessions/start", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<SessionResponse>();
+                return result?.SessionId;
+            }
+            else 
+            { 
+                return null;
+            }
+        }
+
+        public async Task<bool> StopSessionAsync(Guid sessionId)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthService.CurrentToken);
+
+            var response = await _httpClient.PostAsync($"api/Sessions/{sessionId}/stop", null);
+
+            return response.IsSuccessStatusCode;
+        }
     }
 }
