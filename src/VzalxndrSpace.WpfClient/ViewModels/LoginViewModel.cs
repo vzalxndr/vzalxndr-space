@@ -34,7 +34,7 @@ namespace VzalxndrSpace.WpfClient.ViewModels
 
             if (success)
             {
-                var mainWindow = App.AppHost!.Services.GetRequiredService<VzalxndrSpace.WpfClient.Views.MainWindow>();
+                var mainWindow = App.AppHost!.Services.GetRequiredService<Views.MainWindow>();
 
                 mainWindow.DataContext = App.AppHost!.Services.GetRequiredService<MainViewModel>();
 

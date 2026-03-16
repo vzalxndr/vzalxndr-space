@@ -13,7 +13,7 @@ namespace VzalxndrSpace.WpfClient
     {
         private readonly HttpClient _client;
 
-        public string? CurrentToken { get; private set; }
+        public static string? CurrentToken { get; private set; }
 
         public AuthService(HttpClient client)
         {
