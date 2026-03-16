@@ -67,8 +67,13 @@ public class SessionService : ISessionService
             throw new InvalidOperationException("Session was less than 3 minutes and was discarded.");
         }
 
-        session.Status = actualDuration.TotalMinutes >= session.TargetDurationMinutes ? SessionStatus.Completed : SessionStatus.Interrupted;
-        
+        var gracePeriod = TimeSpan.FromSeconds(15);
+        var targetDuration = TimeSpan.FromMinutes(session.TargetDurationMinutes);
+
+        session.Status = actualDuration >= (targetDuration - gracePeriod)
+            ? SessionStatus.Completed
+            : SessionStatus.Interrupted;
+
         await _context.SaveChangesAsync();
         
         return MapToResponse(session);
