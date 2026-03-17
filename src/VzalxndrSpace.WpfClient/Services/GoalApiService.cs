@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using VzalxndrSpace.WpfClient.Models;
@@ -45,15 +46,16 @@ namespace VzalxndrSpace.WpfClient.Services
             return response.IsSuccessStatusCode;
         }
 
-        //WARNING: endpoint doesn't exist
-        //public async Task<bool> DeleteGoalAsync(Guid id)
-        //{
-        //    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthService.CurrentToken);
+        public async Task<bool> ArchiveGoalAsync(Guid id)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthService.CurrentToken);
 
-        //    var response = await _httpClient.DeleteAsync($"api/goals/{id}");
+            var content = new StringContent(string.Empty);
 
-        //    return response.IsSuccessStatusCode;
-        //}
+            var response = await _httpClient.PatchAsync($"api/goals/{id}/archive", content);
+
+            return response.IsSuccessStatusCode;
+        }
 
         public async Task<bool> CompleteGoalAsync(Guid id)
         {
@@ -64,6 +66,23 @@ namespace VzalxndrSpace.WpfClient.Services
             var response = await _httpClient.PatchAsync($"api/goals/{id}/complete", content);
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<GoalDto?> UpdateGoalAsync(Guid id, string title, string description)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", AuthService.CurrentToken);
+
+            var content = new { Title = title, Description = description };
+
+            var response = await _httpClient.PutAsJsonAsync($"api/goals/{id}", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<GoalDto>();
+            }
+
+            return null;
         }
 
         public async Task<Guid?> StartSessionAsync(Guid goalId, int targetDurationMinutes)

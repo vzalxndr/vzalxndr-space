@@ -104,6 +104,24 @@
                                         ToolTip="Mark as completed"
                                         Command="{Binding DataContext.CompleteGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
+
+                                <Button Content="🗑"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        FontSize="20"
+                                        Cursor="Hand"
+                                        ToolTip="Mark as completed"
+                                        Command="{Binding DataContext.ArchiveGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}" />
+
+                                <Button Content="✎"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        FontSize="20"
+                                        Cursor="Hand"
+                                        ToolTip="Mark as completed"
+                                        Command="{Binding DataContext.OpenEditGoalWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}" />
                             </StackPanel>
                         </Grid>
                     </Border>

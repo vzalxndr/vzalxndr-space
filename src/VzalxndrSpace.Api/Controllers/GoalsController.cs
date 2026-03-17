@@ -35,6 +35,21 @@ public class GoalsController : ControllerBase
         }
     }
 
+    [HttpPut("{id:guid}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateGoal(Guid id, [FromBody] UpdateGoalRequest request)
+    {
+        try
+        {
+            var result = await _goalService.UpdateGoalAsync(id, request);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetGoals()
     {
@@ -59,6 +74,27 @@ public class GoalsController : ControllerBase
         catch (InvalidOperationException ex)
         {
             // invalid operation, Goal is already completed
+            return Conflict(new { message = ex.Message });
+        }
+    }
+
+    [HttpPatch("{id:guid}/archive")]
+    [Authorize]
+    public async Task<IActionResult> ArchiveGoal(Guid id)
+    {
+        try
+        {
+            var result = await _goalService.ArchiveGoalAsync(id);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            // invalid request data (e.g.: Goal doesn't exist)
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            // invalid operation, Goal is already archived
             return Conflict(new { message = ex.Message });
         }
     }

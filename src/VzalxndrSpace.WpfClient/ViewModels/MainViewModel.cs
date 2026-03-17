@@ -75,25 +75,51 @@ namespace VzalxndrSpace.WpfClient.ViewModels
             }
         }
 
-        //[RelayCommand]
-        //private async Task DeleteGoalAsync(GoalDto? goal)
-        //{
-        //    if (goal == null)
-        //    {
-        //        return;
-        //    }
+        [RelayCommand]
+        private async Task OpenEditGoalWindowAsync(GoalDto? goal)
+        {
+            if (goal == null || goal.Status != 0)
+            {
+                return;
+            }
 
-        //    bool success = await _goalApiClient.DeleteGoalAsync(goal.Id);
+            var editGoalWindow = App.AppHost!.Services.GetRequiredService<Views.EditGoalWindow>();
+            var editGoalVm = App.AppHost!.Services.GetRequiredService<EditGoalViewModel>();
 
-        //    if (success)
-        //    {
-        //        Goals.Remove(goal);
-        //    }
-        //    else
-        //    { 
-        //        //TODO: MessageBox with an error 
-        //    }
-        //}
+            editGoalVm.Initialize(goal);
+            editGoalWindow.DataContext = editGoalVm;
+
+            editGoalWindow.Owner = System.Windows.Application.Current.Windows
+                .OfType<Views.MainWindow>()
+                .FirstOrDefault();
+
+            bool? result = editGoalWindow.ShowDialog();
+
+            if (result == true)
+            {
+                await LoadGoalsAsync();
+            }
+        }
+
+        [RelayCommand]
+        private async Task ArchiveGoalAsync(GoalDto? goal)
+        {
+            if (goal == null)
+            {
+                return;
+            }
+
+            bool success = await _goalApiClient.ArchiveGoalAsync(goal.Id);
+
+            if (success)
+            {
+                Goals.Remove(goal);
+            }
+            else
+            {
+                //TODO: MessageBox with an error 
+            }
+        }
 
         [RelayCommand]
         private async Task CompleteGoalAsync(GoalDto? goal)
