@@ -5,39 +5,144 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="vzalxndr-space: login"
-        Height="300"
+        Height="350"
         Width="400"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Background="#191919"
+        FontFamily="Segoe UI"
+        TextElement.Foreground="#E0E0E0"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
 
-    <Grid Margin="20">
+    <Window.Resources>
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#2EA043" />
+            <Setter Property="Foreground"
+                    Value="#FFFFFF" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#3FB950" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#238636" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ModernPasswordBoxStyle"
+               TargetType="PasswordBox">
+            <Setter Property="Background"
+                    Value="#0D0D0D" />
+            <Setter Property="Foreground"
+                    Value="#FFFFFF" />
+            <Setter Property="BorderBrush"
+                    Value="#303030" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Padding"
+                    Value="12,0" />
+            <Setter Property="PasswordChar"
+                    Value="●" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="Bd"
+                                        Property="BorderBrush"
+                                        Value="#555555" />
+                                <Setter TargetName="Bd"
+                                        Property="Background"
+                                        Value="#151515" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin"
+                                     Value="True">
+                                <Setter TargetName="Bd"
+                                        Property="BorderBrush"
+                                        Value="#2EA043" />
+                                <Setter TargetName="Bd"
+                                        Property="Background"
+                                        Value="#0D0D0D" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="40,20,40,20">
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Stretch">
+            
             <TextBlock Text="vzalxndr-space"
-                       FontSize="24"
+                       FontSize="28"
                        FontWeight="Bold"
+                       Foreground="#FFFFFF"
                        HorizontalAlignment="Center"
-                       Margin="0,0,0,20" />
-            <TextBlock Text="Enter admin password:"
-                       Margin="0,0,0,5" />
-            <PasswordBox x:Name="UserPasswordBox"
-                         PasswordChanged="UserPasswordBox_PasswordChanged"
-                         Margin="0,0,0,15"
-                         Padding="5"
-                         FontSize="16" />
+                       Margin="0,0,0,30" />
+
+            <StackPanel Margin="0,0,0,25">
+                <TextBlock Text="Enter admin password:"
+                           Foreground="#A0A0A0"
+                           FontSize="14"
+                           Margin="0,0,0,8" />
+
+                <PasswordBox x:Name="UserPasswordBox"
+                             PasswordChanged="UserPasswordBox_PasswordChanged"
+                             Style="{StaticResource ModernPasswordBoxStyle}"
+                             Height="42"
+                             FontSize="16" />
+            </StackPanel>
+
             <Button Content="Login"
                     Command="{Binding LoginCommand}"
                     IsDefault="True"
-                    Height="35"
-                    FontSize="16"
-                    Background="#007ACC"
-                    Foreground="White"
-                    BorderThickness="0" />
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Height="42"
+                    FontSize="16" />
 
             <TextBlock Text="{Binding ErrorMessage}"
-                       Foreground="Red"
+                       Foreground="#FF6B6B"
+                       FontSize="13"
+                       FontWeight="SemiBold"
                        HorizontalAlignment="Center"
-                       Margin="0,15,0,0"
+                       TextAlignment="Center"
+                       Margin="0,20,0,0"
                        TextWrapping="Wrap" />
         </StackPanel>
     </Grid>
