@@ -7,26 +7,162 @@
         xmlns:converters="clr-namespace:VzalxndrSpace.WpfClient.Converters"
         mc:Ignorable="d"
         Title="vzalxndr-space: admin"
-        Height="450"
+        Height="550"
         Width="800"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Background="#191919"
+        FontFamily="Segoe UI"
+        TextElement.Foreground="#E0E0E0"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType">
 
     <Window.Resources>
+        <!-- Твои конвертеры -->
         <converters:StatusToTextConverter x:Key="StatusTextConverter" />
         <converters:StatusToColorConverter x:Key="StatusColorConverter" />
+
+        <FontFamily x:Key="IconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#2EA043" />
+            <Setter Property="Foreground"
+                    Value="#FFFFFF" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="Padding"
+                    Value="16,8" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#3FB950" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#238636" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="Background"
+                    Value="#33FF4C4C" />
+            <Setter Property="Foreground"
+                    Value="#FF6B6B" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#FF4C4C" />
+                    <Setter Property="Foreground"
+                            Value="#FFFFFF" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="IconButtonStyle"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="#808080" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="FontFamily"
+                    Value="{StaticResource IconFont}" />
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="Width"
+                    Value="32" />
+            <Setter Property="Height"
+                    Value="32" />
+            <Setter Property="Margin"
+                    Value="4,0" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#2A2A2A" />
+                    <Setter Property="Foreground"
+                            Value="#FFFFFF" />
+                </Trigger>
+                <Trigger Property="ToolTip"
+                         Value="Delete goal">
+                    <Setter Property="Foreground"
+                            Value="#808080" />
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver"
+                                   Value="True" />
+                        <Condition Property="ToolTip"
+                                   Value="Delete goal" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background"
+                            Value="#33FF4C4C" />
+                    <Setter Property="Foreground"
+                            Value="#FF6B6B" />
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
-    <Grid Margin="20">
+    <Grid Margin="30,20,30,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
-              Margin="0,0,0,15">
-            <TextBlock Text="Goals:"
-                       FontSize="24"
+              Margin="0,0,0,25">
+            <TextBlock Text="Goals"
+                       FontSize="28"
                        FontWeight="Bold"
+                       Foreground="#FFFFFF"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center" />
 
@@ -34,93 +170,93 @@
                         HorizontalAlignment="Right">
                 <Button Content="New goal"
                         Command="{Binding OpenAddGoalWindowCommand}"
-                        Margin="0,0,15,0"
-                        Padding="15,7"
-                        Background="#28A745"
-                        Foreground="White"
-                        BorderThickness="0"
-                        FontWeight="SemiBold" />
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Margin="0,0,12,0" />
 
                 <Button Content="Log out"
                         Command="{Binding LogoutCommand}"
-                        Padding="15,7"
-                        Background="#FF4C4C"
-                        Foreground="White"
-                        BorderThickness="0"
-                        FontWeight="SemiBold" />
+                        Style="{StaticResource DangerButtonStyle}" />
             </StackPanel>
         </Grid>
 
         <ListBox ItemsSource="{Binding Goals}"
                  Grid.Row="1"
+                 Background="Transparent"
                  BorderThickness="0"
-                 HorizontalAlignment="Left">
+                 HorizontalAlignment="Stretch"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border Background="#F0F0F0"
-                            CornerRadius="5"
-                            Padding="15"
-                            Margin="0,0,0,10"
-                            Width="400">
+                    <Border Background="#212121"
+                            CornerRadius="8"
+                            Padding="20"
+                            Margin="5,5,5,15"
+                            MaxWidth="700"
+                            HorizontalAlignment="Left">
+
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="15"
+                                              ShadowDepth="4"
+                                              Opacity="0.15"
+                                              Color="Black"
+                                              Direction="270" />
+                        </Border.Effect>
+
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="450" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0">
+                            <StackPanel Grid.Column="0"
+                                        VerticalAlignment="Center">
                                 <TextBlock Text="{Binding Title}"
-                                           FontSize="18"
-                                           FontWeight="Bold" />
+                                           FontSize="17"
+                                           Foreground="#FFFFFF"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,4" />
+
                                 <TextBlock Text="{Binding Description}"
+                                           Foreground="#A0A0A0"
+                                           FontSize="14"
+                                           LineHeight="20"
                                            TextWrapping="Wrap"
-                                           Margin="0,5,0,0" />
+                                           Margin="0,0,0,10" />
 
                                 <TextBlock Text="{Binding Status, Converter={StaticResource StatusTextConverter}}"
                                            Foreground="{Binding Status, Converter={StaticResource StatusColorConverter}}"
-                                           Margin="0,5,0,0"
+                                           FontSize="13"
                                            FontWeight="SemiBold" />
                             </StackPanel>
 
                             <StackPanel Grid.Column="1"
                                         Orientation="Horizontal"
-                                        VerticalAlignment="Center"
-                                        Margin="10,0,0,0">
-                                <Button Content="▶️"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        FontSize="20"
-                                        Cursor="Hand"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center">
+
+                                <Button Content="&#xE768;"
+                                        Style="{StaticResource IconButtonStyle}"
                                         ToolTip="Start pomodoro session"
-                                        Margin="0,0,10,0"
                                         Command="{Binding DataContext.StartSessionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
 
-                                <Button Content="✅"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        FontSize="20"
-                                        Cursor="Hand"
+                                <Button Content="&#xE73E;"
+                                        Style="{StaticResource IconButtonStyle}"
                                         ToolTip="Mark as completed"
                                         Command="{Binding DataContext.CompleteGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
 
-                                <Button Content="🗑"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        FontSize="20"
-                                        Cursor="Hand"
-                                        ToolTip="Mark as completed"
-                                        Command="{Binding DataContext.ArchiveGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                <Button Content="&#xE70F;"
+                                        Style="{StaticResource IconButtonStyle}"
+                                        ToolTip="Edit goal"
+                                        Command="{Binding DataContext.OpenEditGoalWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
 
-                                <Button Content="✎"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        FontSize="20"
-                                        Cursor="Hand"
-                                        ToolTip="Mark as completed"
-                                        Command="{Binding DataContext.OpenEditGoalWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                <Button Content="&#xE74D;"
+                                        Style="{StaticResource IconButtonStyle}"
+                                        ToolTip="Delete goal"
+                                        Command="{Binding DataContext.ArchiveGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding}" />
                             </StackPanel>
                         </Grid>
