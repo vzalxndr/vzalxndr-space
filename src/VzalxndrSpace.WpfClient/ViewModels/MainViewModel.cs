@@ -16,14 +16,16 @@ namespace VzalxndrSpace.WpfClient.ViewModels
     {
         private readonly GoalApiService _goalApiClient;
         private readonly AuthService _authService;
+        private readonly IDialogService _dialogService;
 
         [ObservableProperty]
         private ObservableCollection<GoalDto> _goals = new();
 
-        public MainViewModel(GoalApiService goalApiClient, AuthService authService)
+        public MainViewModel(GoalApiService goalApiClient, AuthService authService, IDialogService dialogService)
         { 
             _authService = authService;
             _goalApiClient = goalApiClient;
+            _dialogService = dialogService;
 
             LoadGoalsCommand.Execute(null);
         }
@@ -104,24 +106,26 @@ namespace VzalxndrSpace.WpfClient.ViewModels
         [RelayCommand]
         private async Task ArchiveGoalAsync(GoalDto? goal)
         {
-            if (goal == null)
-            {
-                return;
-            }
+            if (goal == null) return;
+
+            bool isConfirmed = await _dialogService.ConfirmAsync($"Are you sure you want to delete '{goal.Title}'?");
+
+            if (!isConfirmed) return;
 
             bool success = await _goalApiClient.ArchiveGoalAsync(goal.Id);
 
             if (success)
             {
                 Goals.Remove(goal);
+                _dialogService.ShowToast("Goal successfully deleted.");
             }
             else
             {
-                //TODO: MessageBox with an error 
+                _dialogService.ShowToast("Failed to delete the goal.", isError: true);
             }
         }
 
-        [RelayCommand]
+            [RelayCommand]
         private async Task CompleteGoalAsync(GoalDto? goal)
         {
             if (goal == null || goal.Status == 1)

@@ -44,6 +44,9 @@ public partial class App : Application
 
                 services.AddTransient<EditGoalViewModel>();
                 services.AddTransient<Views.EditGoalWindow>();
+
+                services.AddSingleton<IDialogService, DialogService>();
+
             })
             .Build();
     }

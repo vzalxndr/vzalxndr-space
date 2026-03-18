@@ -92,6 +92,12 @@ public partial class SessionViewModel : ObservableObject
         }
     }
 
+    public void ForceStopSession()
+    {
+        _timer.Stop();
+        _ = StopServerSessionAsync();
+    }
+
     private void UpdateTimeDisplay()
     {
         TimeSpan time = TimeSpan.FromSeconds(_secondsLeft);
