@@ -17,7 +17,6 @@
         TextOptions.TextRenderingMode="ClearType">
 
     <Window.Resources>
-        <!-- Твои конвертеры -->
         <converters:StatusToTextConverter x:Key="StatusTextConverter" />
         <converters:StatusToColorConverter x:Key="StatusColorConverter" />
 
@@ -77,6 +76,29 @@
                             Value="#FF4C4C" />
                     <Setter Property="Foreground"
                             Value="#FFFFFF" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="Background"
+                    Value="#2A2A2A" />
+            <Setter Property="Foreground"
+                    Value="#E0E0E0" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#383838" />
+                    <Setter Property="Foreground"
+                            Value="#FFFFFF" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#1F1F1F" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -151,118 +173,178 @@
         </Style>
     </Window.Resources>
 
-    <Grid Margin="30,20,30,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Grid>
 
-        <Grid Grid.Row="0"
-              Margin="0,0,0,25">
-            <TextBlock Text="Goals"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="#FFFFFF"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center" />
+        <Grid Margin="30,20,30,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
-                <Button Content="New goal"
-                        Command="{Binding OpenAddGoalWindowCommand}"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Margin="0,0,12,0" />
+            <Grid Grid.Row="0"
+                  Margin="0,0,0,25">
+                <TextBlock Text="Goals"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#FFFFFF"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Content="New goal"
+                            Command="{Binding OpenAddGoalWindowCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Margin="0,0,12,0" />
+                    <Button Content="Log out"
+                            Command="{Binding LogoutCommand}"
+                            Style="{StaticResource DangerButtonStyle}" />
+                </StackPanel>
+            </Grid>
 
-                <Button Content="Log out"
-                        Command="{Binding LogoutCommand}"
-                        Style="{StaticResource DangerButtonStyle}" />
-            </StackPanel>
+            <ListBox ItemsSource="{Binding Goals}"
+                     Grid.Row="1"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     HorizontalAlignment="Stretch"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#212121"
+                                CornerRadius="8"
+                                Padding="20"
+                                Margin="5,5,5,15"
+                                MaxWidth="700"
+                                HorizontalAlignment="Left">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="15"
+                                                  ShadowDepth="4"
+                                                  Opacity="0.15"
+                                                  Color="Black"
+                                                  Direction="270" />
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="450" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0"
+                                            VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="17"
+                                               Foreground="#FFFFFF"
+                                               FontWeight="SemiBold"
+                                               Margin="0,0,0,4" />
+                                    <TextBlock Text="{Binding Description}"
+                                               Foreground="#A0A0A0"
+                                               FontSize="14"
+                                               LineHeight="20"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,0,10" />
+                                    <TextBlock Text="{Binding Status, Converter={StaticResource StatusTextConverter}}"
+                                               Foreground="{Binding Status, Converter={StaticResource StatusColorConverter}}"
+                                               FontSize="13"
+                                               FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center">
+                                    <Button Content="&#xE768;"
+                                            Style="{StaticResource IconButtonStyle}"
+                                            ToolTip="Start pomodoro session"
+                                            Command="{Binding DataContext.StartSessionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="&#xE73E;"
+                                            Style="{StaticResource IconButtonStyle}"
+                                            ToolTip="Mark as completed"
+                                            Command="{Binding DataContext.CompleteGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="&#xE70F;"
+                                            Style="{StaticResource IconButtonStyle}"
+                                            ToolTip="Edit goal"
+                                            Command="{Binding DataContext.OpenEditGoalWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="&#xE74D;"
+                                            Style="{StaticResource IconButtonStyle}"
+                                            ToolTip="Delete goal"
+                                            Command="{Binding DataContext.ArchiveGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
 
-        <ListBox ItemsSource="{Binding Goals}"
-                 Grid.Row="1"
-                 Background="Transparent"
-                 BorderThickness="0"
-                 HorizontalAlignment="Stretch"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <Grid x:Name="DialogOverlay"
+              Background="#B2000000"
+              Visibility="Collapsed"
+              Panel.ZIndex="100">
+            <Border Background="#212121"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="30"
+                    CornerRadius="12"
+                    MaxWidth="400">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20"
+                                      ShadowDepth="5"
+                                      Opacity="0.3"
+                                      Color="Black" />
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Confirmation"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#FFFFFF"
+                               Margin="0,0,0,15" />
+                    <TextBlock x:Name="DialogMessageText"
+                               Text="Are you sure?"
+                               Foreground="#A0A0A0"
+                               FontSize="15"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,25" />
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Content="Cancel"
+                                Click="DialogCancel_Click"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Margin="0,0,10,0" />
+                        <Button Content="Delete"
+                                Click="DialogConfirm_Click"
+                                Style="{StaticResource DangerButtonStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border Background="#212121"
-                            CornerRadius="8"
-                            Padding="20"
-                            Margin="5,5,5,15"
-                            MaxWidth="700"
-                            HorizontalAlignment="Left">
+        <Border x:Name="ToastPanel"
+                Background="#238636"
+                CornerRadius="8"
+                Padding="20,12"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Margin="0,0,0,30"
+                IsHitTestVisible="False"
+                Opacity="0"
+                Panel.ZIndex="200">
+            <Border.RenderTransform>
+                <TranslateTransform x:Name="ToastTransform"
+                                    Y="50" />
+            </Border.RenderTransform>
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15"
+                                  ShadowDepth="4"
+                                  Opacity="0.2"
+                                  Color="Black" />
+            </Border.Effect>
+            <TextBlock x:Name="ToastText"
+                       Text="Success message"
+                       Foreground="White"
+                       FontSize="14"
+                       FontWeight="SemiBold" />
+        </Border>
 
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="15"
-                                              ShadowDepth="4"
-                                              Opacity="0.15"
-                                              Color="Black"
-                                              Direction="270" />
-                        </Border.Effect>
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="450" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0"
-                                        VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Title}"
-                                           FontSize="17"
-                                           Foreground="#FFFFFF"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,4" />
-
-                                <TextBlock Text="{Binding Description}"
-                                           Foreground="#A0A0A0"
-                                           FontSize="14"
-                                           LineHeight="20"
-                                           TextWrapping="Wrap"
-                                           Margin="0,0,0,10" />
-
-                                <TextBlock Text="{Binding Status, Converter={StaticResource StatusTextConverter}}"
-                                           Foreground="{Binding Status, Converter={StaticResource StatusColorConverter}}"
-                                           FontSize="13"
-                                           FontWeight="SemiBold" />
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1"
-                                        Orientation="Horizontal"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center">
-
-                                <Button Content="&#xE768;"
-                                        Style="{StaticResource IconButtonStyle}"
-                                        ToolTip="Start pomodoro session"
-                                        Command="{Binding DataContext.StartSessionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}" />
-
-                                <Button Content="&#xE73E;"
-                                        Style="{StaticResource IconButtonStyle}"
-                                        ToolTip="Mark as completed"
-                                        Command="{Binding DataContext.CompleteGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}" />
-
-                                <Button Content="&#xE70F;"
-                                        Style="{StaticResource IconButtonStyle}"
-                                        ToolTip="Edit goal"
-                                        Command="{Binding DataContext.OpenEditGoalWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}" />
-
-                                <Button Content="&#xE74D;"
-                                        Style="{StaticResource IconButtonStyle}"
-                                        ToolTip="Delete goal"
-                                        Command="{Binding DataContext.ArchiveGoalCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
     </Grid>
 </Window>
