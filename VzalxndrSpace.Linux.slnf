@@ -1,0 +1,10 @@
+﻿{
+  "solution": {
+    "path": "VzalxndrSpace.sln",
+    "projects": [
+      "src\\VzalxndrSpace.Api\\VzalxndrSpace.Api.csproj",
+      "src\\VzalxndrSpace.Domain\\VzalxndrSpace.Domain.csproj",
+      "src\\VzalxndrSpace.Infrastructure\\VzalxndrSpace.Infrastructure.csproj"
+    ]
+  }
+}
