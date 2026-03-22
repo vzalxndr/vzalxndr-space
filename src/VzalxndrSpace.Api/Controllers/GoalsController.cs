@@ -1,11 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using VzalxndrSpace.Api.DTOs;
 using VzalxndrSpace.Api.Services;
-using VzalxndrSpace.Domain.Entities;
-using VzalxndrSpace.Infrastructure.Data;
 
 namespace VzalxndrSpace.Api.Controllers;
 
@@ -24,30 +22,16 @@ public class GoalsController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateGoal([FromBody] CreateGoalRequest request)
     {
-        try
-        {
-            var result = await _goalService.CreateGoalAsync(request);
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _goalService.CreateGoalAsync(request);
+        return Ok(result);
     }
 
     [HttpPut("{id:guid}")]
     [Authorize]
     public async Task<IActionResult> UpdateGoal(Guid id, [FromBody] UpdateGoalRequest request)
     {
-        try
-        {
-            var result = await _goalService.UpdateGoalAsync(id, request);
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _goalService.UpdateGoalAsync(id, request);
+        return Ok(result);
     }
 
     [HttpGet]
@@ -61,41 +45,15 @@ public class GoalsController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CompleteGoal(Guid id)
     {
-        try
-        {
-            var result = await _goalService.CompleteGoalAsync(id);
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            // invalid request data (e.g.: Goal doesn't exist)
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            // invalid operation, Goal is already completed
-            return Conflict(new { message = ex.Message });
-        }
+        var result = await _goalService.CompleteGoalAsync(id);
+        return Ok(result);
     }
 
     [HttpPatch("{id:guid}/archive")]
     [Authorize]
     public async Task<IActionResult> ArchiveGoal(Guid id)
     {
-        try
-        {
-            var result = await _goalService.ArchiveGoalAsync(id);
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            // invalid request data (e.g.: Goal doesn't exist)
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            // invalid operation, Goal is already archived
-            return Conflict(new { message = ex.Message });
-        }
+        var result = await _goalService.ArchiveGoalAsync(id);
+        return Ok(result);
     }
 }

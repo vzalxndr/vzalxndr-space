@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VzalxndrSpace.Api.DTOs;
+using VzalxndrSpace.Api.Exceptions;
 using VzalxndrSpace.Domain.Entities;
 using VzalxndrSpace.Domain.Enums;
 using VzalxndrSpace.Infrastructure.Data;
@@ -21,14 +22,14 @@ public class SessionService : ISessionService
         var goalExists = await _context.Goals.AnyAsync(g => g.Id == request.GoalId);
         if (!goalExists)
         {
-            throw new ArgumentException("Goal not found.");
+            throw new NotFoundException("Goal not found.");
         }
 
         // check if active session exists
         var hasActiveSession = await _context.Sessions.AnyAsync(s => s.Status == SessionStatus.InProgress);
         if (hasActiveSession)
         {
-            throw new InvalidOperationException("An active session already exists. Stop it first.");
+            throw new ConflictException("An active session already exists. Stop it first.");
         }
 
         var session = new Session
@@ -50,11 +51,11 @@ public class SessionService : ISessionService
         var session = await _context.Sessions.FindAsync(sessionId);
         if (session == null)
         {
-            throw new ArgumentException("Session not found.");
+            throw new NotFoundException("Session not found.");
         }
         if (session.Status != SessionStatus.InProgress)
         {
-            throw new InvalidOperationException("Session is already stopped.");
+            throw new ConflictException("Session is already stopped.");
         }
         
         session.EndTimeUtc = DateTime.UtcNow;
@@ -64,7 +65,7 @@ public class SessionService : ISessionService
         {
             _context.Sessions.Remove(session);
             await _context.SaveChangesAsync();
-            throw new InvalidOperationException("Session was less than 3 minutes and was discarded.");
+            throw new ConflictException("Session was less than 3 minutes and was discarded.");
         }
 
         var gracePeriod = TimeSpan.FromSeconds(15);

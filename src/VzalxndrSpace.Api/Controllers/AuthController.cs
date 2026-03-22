@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using VzalxndrSpace.Api.Exceptions;
 
 namespace VzalxndrSpace.Api.Controllers;
 
@@ -26,7 +27,7 @@ public class AuthController : ControllerBase
         
         if (request.Password != correctPassword)
         {
-            return Unauthorized(new { message = "Invalid password" });
+            throw new UnauthorizedException("Invalid password");
         }
         
         var secretKey = _configuration["JwtSettings:SecretKey"];

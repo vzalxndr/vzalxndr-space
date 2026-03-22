@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using VzalxndrSpace.Api.Infrastructure;
 using VzalxndrSpace.Api.Services;
 using VzalxndrSpace.Infrastructure.Data;
 
@@ -40,6 +41,10 @@ builder.Services.AddScoped<IStatsService, StatsService>();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddProblemDetails();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -87,5 +92,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler();
 app.MapControllers();
 app.Run();
