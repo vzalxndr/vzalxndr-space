@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VzalxndrSpace.Api.DTOs;
+using VzalxndrSpace.Api.Exceptions;
 using VzalxndrSpace.Domain.Entities;
 using VzalxndrSpace.Infrastructure.Data;
 
@@ -18,7 +19,7 @@ public class GoalService : IGoalService
     {
         if (string.IsNullOrEmpty(request.Title))
         {
-            throw new ArgumentException("Title cannot be empty.");
+            throw new BadRequestException("Title cannot be empty.");
         }
 
         var goal = new Goal
@@ -50,11 +51,11 @@ public class GoalService : IGoalService
 
         if (goal == null)
         {
-            throw new ArgumentException("Goal not found.");
+            throw new NotFoundException("Goal not found.");
         }
         if (string.IsNullOrEmpty(request.Title))
         {
-            throw new ArgumentException("Title cannot be empty.");
+            throw new BadRequestException("Title cannot be empty.");
         }
 
         goal.Title = request.Title;
@@ -72,11 +73,11 @@ public class GoalService : IGoalService
             .FirstOrDefaultAsync(g => g.Id == id);
         if (goal == null)
         {
-            throw new ArgumentException("Goal not found.");
+            throw new NotFoundException("Goal not found.");
         }
         if (goal.Status == Domain.Enums.GoalStatus.Completed)
         {
-            throw new InvalidOperationException("Goal is already completed.");
+            throw new ConflictException("Goal is already completed.");
         }
         
         goal.Status = Domain.Enums.GoalStatus.Completed;
@@ -93,11 +94,11 @@ public class GoalService : IGoalService
             .FirstOrDefaultAsync(g => g.Id == id);
         if (goal == null)
         {
-            throw new ArgumentException("Goal not found.");
+            throw new NotFoundException("Goal not found.");
         }
         if (goal.Status == Domain.Enums.GoalStatus.Archived)
         {
-            throw new InvalidOperationException("Goal is already archived.");
+            throw new ConflictException("Goal is already archived.");
         }
 
         goal.Status = Domain.Enums.GoalStatus.Archived;
