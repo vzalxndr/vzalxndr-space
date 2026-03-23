@@ -1,11 +1,14 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using VzalxndrSpace.Api.Infrastructure;
 using VzalxndrSpace.Api.Services;
+using VzalxndrSpace.Api.Validators;
 using VzalxndrSpace.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +48,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddProblemDetails();
+
+builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateGoalRequestValidator>();
 
 builder.Services.AddSwaggerGen(c =>
 {

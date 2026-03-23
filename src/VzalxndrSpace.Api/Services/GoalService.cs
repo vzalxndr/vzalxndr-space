@@ -17,11 +17,6 @@ public class GoalService : IGoalService
 
     public async Task<GoalResponse> CreateGoalAsync(CreateGoalRequest request)
     {
-        if (string.IsNullOrEmpty(request.Title))
-        {
-            throw new BadRequestException("Title cannot be empty.");
-        }
-
         var goal = new Goal
         {
             Title = request.Title,
@@ -52,10 +47,6 @@ public class GoalService : IGoalService
         if (goal == null)
         {
             throw new NotFoundException("Goal not found.");
-        }
-        if (string.IsNullOrEmpty(request.Title))
-        {
-            throw new BadRequestException("Title cannot be empty.");
         }
 
         goal.Title = request.Title;
