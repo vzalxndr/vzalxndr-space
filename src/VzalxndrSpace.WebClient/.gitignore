@@ -37,3 +37,8 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# env / secrets
+.env
+.env.*
+!.env.example
