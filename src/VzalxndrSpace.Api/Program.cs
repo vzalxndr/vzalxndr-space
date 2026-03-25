@@ -41,6 +41,8 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 
 builder.Services.AddScoped<IStatsService, StatsService>();
 
+builder.Services.AddScoped<IBackupService, BackupService>();
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
