@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using VzalxndrSpace.Api.BackgroundServices;
 using VzalxndrSpace.Api.Infrastructure;
 using VzalxndrSpace.Api.Services;
 using VzalxndrSpace.Api.Validators;
@@ -42,6 +43,10 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IStatsService, StatsService>();
 
 builder.Services.AddScoped<IBackupService, BackupService>();
+
+builder.Services.AddScoped<ISessionCleanupProcessor, SessionCleanupProcessor>();
+
+builder.Services.AddHostedService<SessionCleanupWorker>();
 
 builder.Services.AddControllers();
 
