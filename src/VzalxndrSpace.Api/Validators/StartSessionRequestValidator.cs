@@ -11,6 +11,6 @@ public class StartSessionRequestValidator : AbstractValidator<StartSessionReques
             .NotEmpty().WithMessage("Goal ID is required.");
 
         RuleFor(x => x.TargetDurationMinutes)
-            .GreaterThan(4).WithMessage("Target duration must be at least 4 minutes.");
+            .GreaterThan(3).WithMessage("Target duration must be at least 4 minutes.");
     }
 }
