@@ -87,15 +87,26 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("FrontendPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.WithOrigins(
+                "http://localhost:5173", // default Vue development port
+                "https://my-future.app" // real future admin/portfolio website
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<VzalxndrSpace.Infrastructure.Data.AppDbContext>();
+    dbContext.Database.Migrate();
+}
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
@@ -103,9 +114,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAll");
+app.UseRouting();
+app.UseCors("FrontendPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseExceptionHandler();
 app.MapControllers();
+
 app.Run();
