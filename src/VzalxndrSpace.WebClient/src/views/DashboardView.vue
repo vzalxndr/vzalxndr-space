@@ -10,25 +10,28 @@ const handleLogout = async () => {
 
 <template>
   <div class="min-h-screen flex bg-zinc-950 text-zinc-100">
-    <!-- Sidebar -->
     <aside class="w-64 flex flex-col bg-zinc-900 border-r border-zinc-800">
       <div class="h-16 flex items-center px-6 border-b border-zinc-800">
         <span class="text-lg font-bold tracking-tight text-white">VzalxndrSpace</span>
       </div>
 
-      <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
-        <a
-          href="#"
-          class="flex items-center px-3 py-2 bg-zinc-800/50 text-indigo-400 rounded-lg font-medium"
-        >
-          🎯 Goals
-        </a>
-        <a
-          href="#"
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <!-- Исправленная ссылка на Goals -->
+        <router-link
+          :to="{ name: 'goals' }"
+          exact-active-class="bg-zinc-800/50 text-indigo-400"
           class="flex items-center px-3 py-2 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg font-medium transition-colors"
         >
-          📊 Statistics (Heatmap)
-        </a>
+          🎯 Goals
+        </router-link>
+
+        <router-link
+          :to="{ name: 'stats' }"
+          active-class="bg-zinc-800/50 text-indigo-400"
+          class="flex items-center px-3 py-2 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 rounded-lg font-medium transition-colors"
+        >
+          📊 Statistics
+        </router-link>
       </nav>
 
       <div class="p-4 border-t border-zinc-800">
@@ -50,12 +53,6 @@ const handleLogout = async () => {
 
       <div class="flex-1 overflow-auto p-8">
         <router-view />
-
-        <div
-          class="border-2 border-dashed border-zinc-800 rounded-2xl h-96 flex items-center justify-center text-zinc-500"
-        >
-          Select a section from the menu on the left
-        </div>
       </div>
     </main>
   </div>
