@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { apiClient } from '@/api/client'
-import type { Goal, CreateGoalDto } from '@/types'
+import type { Goal, CreateGoalDto, UpdateGoalDto } from '@/types'
 
 export const useGoalsStore = defineStore('goals', () => {
   const goals = ref<Goal[]>([])
@@ -20,17 +20,23 @@ export const useGoalsStore = defineStore('goals', () => {
   }
 
   const createGoal = async (payload: CreateGoalDto) => {
-    try {
-      const { data } = await apiClient.post<Goal>('/Goals', payload)
-      if (data && data.id) {
-        goals.value.unshift(data)
-      } else {
-        await fetchGoals()
-      }
-    } catch (error) {
-      console.error('Error while creating goal:', error)
-      throw error
-    }
+    await apiClient.post('/Goals', payload)
+    await fetchGoals()
+  }
+
+  const updateGoal = async (id: string, payload: UpdateGoalDto) => {
+    await apiClient.put(`/Goals/${id}`, payload)
+    await fetchGoals()
+  }
+
+  const completeGoal = async (id: string) => {
+    await apiClient.patch(`/Goals/${id}/complete`)
+    await fetchGoals()
+  }
+
+  const archiveGoal = async (id: string) => {
+    await apiClient.patch(`/Goals/${id}/archive`)
+    await fetchGoals()
   }
 
   return {
@@ -38,5 +44,8 @@ export const useGoalsStore = defineStore('goals', () => {
     isLoading,
     fetchGoals,
     createGoal,
+    updateGoal,
+    completeGoal,
+    archiveGoal,
   }
 })

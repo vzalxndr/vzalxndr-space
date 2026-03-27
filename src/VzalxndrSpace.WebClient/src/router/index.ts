@@ -5,6 +5,7 @@ import DashboardView from '@/views/DashboardView.vue'
 import LoginView from '@/views/LoginView.vue'
 import GoalsView from '@/views/GoalsView.vue'
 import TimerView from '@/views/TimerView.vue'
+import StatsView from '@/views/StatsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,7 @@ const router = createRouter({
       children: [
         { path: '', name: 'goals', component: GoalsView },
         { path: 'timer', name: 'timer', component: TimerView },
+        { path: 'stats', name: 'stats', component: StatsView },
       ],
     },
   ],
