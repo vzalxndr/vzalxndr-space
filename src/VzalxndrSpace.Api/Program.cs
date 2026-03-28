@@ -90,8 +90,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("FrontendPolicy", policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173", // default Vue development port
-                "https://my-future.app" // real future admin/portfolio website
+                // "http://localhost:5173", // default Vue development port
+                "https://space.vzalxndr.xyz" // real future admin/portfolio website
             )
             .AllowAnyMethod()
             .AllowAnyHeader();
